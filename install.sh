@@ -2,6 +2,76 @@
 
 set -x
 set -e
+read -r -p "Please input your platform(Arch|Ubuntu|Mac)" PLATFORM 
+
+function platform_run(){
+    case "${PLATFORM}" in
+        Mac)
+            echo "mac platform"
+            $1;
+            ;;
+        Ubuntu)
+            echo "ubuntu"
+            $2;
+            ;;
+        Arch)
+            echo "arch "
+            $3
+            ;;
+        *)
+            echo "bad platform"
+            exit 1
+            ;;
+    esac
+}
+
+
+function check_and_install() {
+    ( which "$1" && echo "$1 installed") || (echo "$1 not installed" && $2 )
+}
+
+
+function install_basic_ubuntu(){
+    sudo apt-get update
+    check_and_install vim "sudo apt-get install -y vim"
+    check_and_install git "sudo apt-get install -y git"
+    check_and_install tmux "sudo apt-get install -y tmux"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+}
+
+function install_basic_arch(){
+    sudo apt-get update
+    check_and_install vim "sudo pacman  install -y vim"
+    check_and_install git "sudo pacman  install -y git"
+    check_and_install tmux "sudo pacman  install -y tmux"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+}
+
+function install_basic_mac(){
+    echo "begin install basic for mac"
+    if which brew ;then
+        echo "brew installed"
+    else
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    fi
+
+    brew update
+    check_and_install vim "brew install -y vim"
+    check_and_install git "brew install -y git"
+    check_and_install zsh "brew install -y zsh"
+    check_and_install tmux "brew install -y tmux"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+    return 0;
+}
+
+platform_run install_basic_mac install_basic_ubuntu install_basic_arch
+
+function make_confs() {
+    read -r -p "Install confs(yes||no):  " INSTALL
+if [ "$INSTALL" != "yes" ] ;then
+    return 0;
+fi
 
 DIR_NAME=.binghe
 
@@ -16,12 +86,15 @@ git clone git@github.com:binghezhouke/confs.git ${DIR_NAME}
 confs=(vimrc tmux.conf)
 for x in "${confs[@]}"
 do
-if [ -f ".${x}" ] ; then
-    echo found ".${x}"
-    cp -rp ".${x}" ".${x}.bak"
-    rm -rf ".${x}"
-fi
+    if [ -f ".${x}" ] ; then
+        echo found ".${x}"
+        cp -rp ".${x}" ".${x}.bak"
+        rm -rf ".${x}"
+    fi
     ln -s "${DIR_NAME}/${x}" ".${x}"
 done
 
 tmux source-file ~/.tmux.conf 
+}
+
+make_confs
