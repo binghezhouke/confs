@@ -1,0 +1,5 @@
+let g:spf13_bundle_groups=['general', 'youcompleteme', 'go', 'javascript']
+let g:ycm_confirm_extra_conf = 0
+set relativenumber
+nnoremap <leader>gg :YcmCompleter GoTo<CR>
+set clipboard=unnamed

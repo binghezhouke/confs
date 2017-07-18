@@ -33,17 +33,17 @@ function check_and_install() {
 
 function install_basic_ubuntu(){
     sudo apt-get update
-    check_and_install vim "sudo apt-get install -y vim"
-    check_and_install git "sudo apt-get install -y git"
-    check_and_install tmux "sudo apt-get install -y tmux"
+    for x in vim zsh git tmux; do
+        check_and_install $x "sudo apt-get install -y $x"
+    done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
 
 function install_basic_arch(){
     sudo apt-get update
-    check_and_install vim "sudo pacman  install -y vim"
-    check_and_install git "sudo pacman  install -y git"
-    check_and_install tmux "sudo pacman  install -y tmux"
+    for x in vim zsh git tmux; do 
+        check_and_install "$x" "sudo pacman  install -y $x"
+    done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
 
@@ -56,10 +56,9 @@ function install_basic_mac(){
     fi
 
     brew update
-    check_and_install vim "brew install -y vim"
-    check_and_install git "brew install -y git"
-    check_and_install zsh "brew install -y zsh"
-    check_and_install tmux "brew install -y tmux"
+    for x in vim zsh git tmux;do 
+        check_and_install "$x" "brew install -y ${x}"
+    done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
     return 0;
@@ -83,7 +82,7 @@ if [ -d ${DIR_NAME} ]; then
 fi
 git clone git@github.com:binghezhouke/confs.git ${DIR_NAME}
 
-confs=(vimrc tmux.conf)
+confs=(vimrc.before.local vimrc.bundles.local tmux.conf)
 for x in "${confs[@]}"
 do
     if [ -f ".${x}" ] ; then
@@ -93,7 +92,7 @@ do
     fi
     ln -s "${DIR_NAME}/${x}" ".${x}"
 done
-
+sh <(curl https://j.mp/spf13-vim3 -L)
 tmux source-file ~/.tmux.conf 
 }
 
