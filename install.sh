@@ -40,9 +40,9 @@ function install_basic_ubuntu(){
 }
 
 function install_basic_arch(){
-    sudo apt-get update
+    sudo pacman -Syyuu
     for x in vim zsh git tmux; do 
-        check_and_install "$x" "sudo pacman  install -y $x"
+        check_and_install "$x" "sudo pacman -Sy --noconfirm $x"
     done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
