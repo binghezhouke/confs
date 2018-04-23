@@ -37,6 +37,7 @@ function install_basic_ubuntu(){
         check_and_install $x "sudo apt-get install -y $x"
     done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    sh <(curl https://j.mp/spf13-vim3 -L)
 }
 
 function install_basic_arch(){
@@ -45,6 +46,7 @@ function install_basic_arch(){
         check_and_install "$x" "sudo pacman -Sy --noconfirm $x"
     done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    sh <(curl https://j.mp/spf13-vim3 -L)
 }
 
 function install_basic_mac(){
@@ -60,11 +62,15 @@ function install_basic_mac(){
         check_and_install "$x" "brew install -y ${x}"
     done
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    sh <(curl https://j.mp/spf13-vim3 -L)
 
     return 0;
 }
 
-platform_run install_basic_mac install_basic_ubuntu install_basic_arch
+read -r -p "Install basics(yes||no):  " INSTALL
+if [ "$INSTALL" == "yes" ] ;then
+    platform_run install_basic_mac install_basic_ubuntu install_basic_arch
+fi
 
 function make_confs() {
     read -r -p "Install confs(yes||no):  " INSTALL
@@ -92,7 +98,6 @@ do
     fi
     ln -s "${DIR_NAME}/${x}" ".${x}"
 done
-sh <(curl https://j.mp/spf13-vim3 -L)
 tmux source-file ~/.tmux.conf 
 }
 
