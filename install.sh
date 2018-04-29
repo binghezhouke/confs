@@ -88,7 +88,7 @@ if [ -d ${DIR_NAME} ]; then
 fi
 git clone git@github.com:binghezhouke/confs.git ${DIR_NAME}
 
-confs=(vimrc.before.local vimrc.bundles.local tmux.conf)
+confs=(vimrc.before.local clang-format tmux.conf)
 for x in "${confs[@]}"
 do
     if [ -f ".${x}" ] ; then
