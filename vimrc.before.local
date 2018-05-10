@@ -6,3 +6,4 @@ let g:ycm_python_binary_path = 'python3'
 set relativenumber
 nnoremap <leader>gg :YcmCompleter GoTo<CR>
 set clipboard=unnamed
+set encoding=utf-8
