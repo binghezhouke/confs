@@ -86,7 +86,7 @@ if [ -d ${DIR_NAME} ]; then
     echo "found existing ${DIR_NAME} dir,move it"
     mv ${DIR_NAME} ${DIR_NAME}-"$(date  "+%Y%m%d-%H%M%S")"
 fi
-git clone git@github.com:binghezhouke/confs.git ${DIR_NAME}
+git clone https://github.com/binghezhouke/confs.git ${DIR_NAME}
 
 confs=(vimrc.before.local clang-format tmux.conf)
 for x in "${confs[@]}"
