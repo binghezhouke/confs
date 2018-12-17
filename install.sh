@@ -2,8 +2,23 @@
 
 set -x
 set -e
-read -r -p "Please input your platform(Arch|Ubuntu|Mac)" PLATFORM 
+function get_host_type(){
+case $(uname -a) in
+    *Ubuntu* )
+        hosttype="Ubuntu";;
+    *Arch*)
+        hosttype="Arch";;
+    *Darwin*)
+        hosttype="Mac";;
+        **)
+        echo "unknown";;
+esac
+}
 
+get_host_type 
+PLATFORM=${hosttype}
+
+echo "detected platform is ${PLATFORM}"
 function platform_run(){
     case "${PLATFORM}" in
         Mac)
