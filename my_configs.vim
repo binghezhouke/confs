@@ -3,6 +3,7 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_invoke_completion = '<C-_>'
 let g:ycm_python_binary_path = 'python3'
 set relativenumber
+set nu rnu
 nnoremap <leader>gg :YcmCompleter GoTo<CR>
 set clipboard=unnamed
 set encoding=utf-8
