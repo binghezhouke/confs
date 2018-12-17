@@ -15,7 +15,7 @@ case $(uname -a) in
 esac
 }
 
-get_host_type 
+get_host_type
 PLATFORM=${hosttype}
 
 echo "detected platform is ${PLATFORM}"
@@ -51,17 +51,13 @@ function install_basic_ubuntu(){
     for x in vim zsh git tmux; do
         check_and_install $x "sudo apt-get install -y $x"
     done
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    sh <(curl https://j.mp/spf13-vim3 -L)
 }
 
 function install_basic_arch(){
     sudo pacman -Syyuu
-    for x in vim zsh git tmux; do 
+    for x in vim zsh git tmux; do
         check_and_install "$x" "sudo pacman -Sy --noconfirm $x"
     done
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    sh <(curl https://j.mp/spf13-vim3 -L)
 }
 
 function install_basic_mac(){
@@ -73,11 +69,9 @@ function install_basic_mac(){
     fi
 
     brew update
-    for x in vim zsh git tmux;do 
+    for x in vim zsh git tmux;do
         check_and_install "$x" "brew install -y ${x}"
     done
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    sh <(curl https://j.mp/spf13-vim3 -L)
 
     return 0;
 }
@@ -98,12 +92,15 @@ DIR_NAME=.binghe
 cd ~
 
 if [ -d ${DIR_NAME} ]; then
-    echo "found existing ${DIR_NAME} dir,move it"
-    mv ${DIR_NAME} ${DIR_NAME}-"$(date  "+%Y%m%d-%H%M%S")"
+    pushd `pwd`
+    cd ${DIR_NAME}
+    git pull origin master
+    popd
+else
+    git clone https://github.com/binghezhouke/confs.git ${DIR_NAME}
 fi
-git clone https://github.com/binghezhouke/confs.git ${DIR_NAME}
 
-confs=(vimrc.before.local clang-format tmux.conf)
+confs=(clang-format tmux.conf)
 for x in "${confs[@]}"
 do
     if [ -f ".${x}" ] ; then
@@ -112,8 +109,20 @@ do
         rm -rf ".${x}"
     fi
     ln -s "${DIR_NAME}/${x}" ".${x}"
+    if [ -d ~/.vim_runtime ]; then
+        pushd `pwd`
+        cd ~/.vim_runtime
+        git pull origin master
+        popd
+    else
+        git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+    fi
+
+    sh ~/.vim_runtime/install_awesome_vimrc.sh
+    ln -sf ~/.binghe/my_configs.vim ~/.vim_runtime/my_configs.vim
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 done
-tmux source-file ~/.tmux.conf 
+tmux source-file ~/.tmux.conf
 }
 
 make_confs
