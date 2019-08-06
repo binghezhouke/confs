@@ -126,3 +126,28 @@ tmux source-file ~/.tmux.conf
 }
 
 make_confs
+
+function update_git(){
+    echo $1 $2
+if [ -d $1 ];then
+    cd $1
+    git pull
+else
+    git clone $2
+fi
+
+}
+
+function update_confs() {
+    read -r -p "Install vim confs(yes||no):  " INSTALL
+if [ "$INSTALL" != "yes" ] ;then
+    return 0;
+fi
+pushd `pwd`
+cd ~/.vim_runtime/my_plugins
+update_git "vim-codefmt" "https://github.com/google/vim-codefmt.git"
+update_git "vim-maktaba" "https://github.com/google/vim-maktaba.git"
+update_git "vim-glaive" "https://github.com/google/vim-glaive.git"
+popd
+}
+update_confs
