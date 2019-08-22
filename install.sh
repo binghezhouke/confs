@@ -52,7 +52,7 @@ function platform_run(){
 
 
 function check_and_install() {
-    ( which "$1" && echo "$1 installed") || (echo "$1 not installed" && $2 )
+    ( command -v "$1" && echo "$1 installed") || (echo "$1 not installed" && $2 )
 }
 
 
@@ -72,7 +72,7 @@ function install_basic_arch(){
 
 function install_basic_mac(){
     echo "begin install basic for mac"
-    if which brew ;then
+    if command -v brew ;then
         echo "brew installed"
     else
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -102,7 +102,7 @@ DIR_NAME=.binghe
 cd ~
 
 if [ -d ${DIR_NAME} ]; then
-    pushd `pwd`
+	pushd "$(pwd)"
     cd ${DIR_NAME}
     git pull origin master
     popd
@@ -122,7 +122,7 @@ do
 done
 
     if [ -d ~/.vim_runtime ]; then
-        pushd `pwd`
+	    pushd "$(pwd)"
         cd ~/.vim_runtime
         git pull origin master
         popd
@@ -142,12 +142,12 @@ tmux source-file ~/.tmux.conf || echo "success"
 make_confs
 
 function update_git(){
-    echo $1 $2
-if [ -d $1 ];then
-    cd $1
+    echo "$1" "$2"
+if [ -d "$1" ];then
+    cd "$1"
     git pull
 else
-    git clone $2
+    git clone "$2"
 fi
 
 }
@@ -157,7 +157,7 @@ function update_confs() {
 if [ "$INSTALL" != "yes" ] ;then
     return 0;
 fi
-pushd `pwd`
+pushd "$(pwd)"
 cd ~/.vim_runtime/my_plugins
 update_git "vim-codefmt" "https://github.com/google/vim-codefmt.git"
 update_git "vim-maktaba" "https://github.com/google/vim-maktaba.git"
