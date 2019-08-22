@@ -151,3 +151,16 @@ update_git "vim-glaive" "https://github.com/google/vim-glaive.git"
 popd
 }
 update_confs
+
+function install_nvim(){
+    read -r -p "Install nvim confs(yes||no):  " INSTALL
+if [ "$INSTALL" != "yes" ] ;then
+    return 0;
+fi
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+mkdir -p ~/.config/nvim/
+ln -s ~/.binghe/init.vim ~/config/nvim/
+pip3 install neovim 
+}
+install_nvim

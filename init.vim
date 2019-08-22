@@ -32,17 +32,17 @@ call plug#end()
 set number
 set relativenumber
 set autochdir
-set tags=tags,./tags
+set tags=tags,./tags;
 let g:ycm_global_ycm_extra_conf = "~/.binghe/ycm_extra_conf.py"
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_invoke_completion = '<C-_>'
 let g:ycm_python_binary_path = 'python3'
-let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_collect_identifiers_from_tags_files = 0
 set completeopt-=preview
 syntax enable
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
   autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
@@ -67,3 +67,9 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " key mapping
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>f :MRU<CR>
+
+try
+    set undodir=~/.local/share/nvim/temp_dirs/undodir
+    set undofile
+catch
+endtry
