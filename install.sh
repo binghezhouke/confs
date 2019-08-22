@@ -2,6 +2,12 @@
 
 set -x
 set -e
+
+SUDO=
+if [[ $EUID -ne 0 ]]; then
+	SUDO=sudo
+fi
+
 function get_host_type(){
 case $(uname -a) in
     *Ubuntu* )
@@ -15,8 +21,12 @@ case $(uname -a) in
 esac
 }
 
+if [ -z "$1" ];then
 get_host_type
 PLATFORM=${hosttype}
+else 
+PLATFORM=${1}
+fi
 
 echo "detected platform is ${PLATFORM}"
 function platform_run(){
@@ -47,16 +57,16 @@ function check_and_install() {
 
 
 function install_basic_ubuntu(){
-    sudo apt-get update
-    for x in vim zsh git tmux; do
-        check_and_install $x "sudo apt-get install -y $x"
+    $SUDO apt-get update
+    for x in vim zsh git tmux curl python3 python3-pip awk; do
+        check_and_install $x "$SUDO apt-get install -y $x"
     done
 }
 
 function install_basic_arch(){
-    sudo pacman -Syyuu
-    for x in vim zsh git tmux; do
-        check_and_install "$x" "sudo pacman -Sy --noconfirm $x"
+    $SUDO pacman -Syyuu
+    for x in vim zsh git tmux curl awk python python-pip neovim; do
+        check_and_install "$x" "$SUDO pacman -Sy --noconfirm $x"
     done
 }
 
@@ -69,7 +79,7 @@ function install_basic_mac(){
     fi
 
     brew update
-    for x in vim zsh git tmux;do
+    for x in vim zsh git tmux curl awk;do
         check_and_install "$x" "brew install -y ${x}"
     done
 
@@ -109,6 +119,8 @@ do
         rm -rf ".${x}"
     fi
     ln -s "${DIR_NAME}/${x}" ".${x}"
+done
+
     if [ -d ~/.vim_runtime ]; then
         pushd `pwd`
         cd ~/.vim_runtime
@@ -117,12 +129,14 @@ do
     else
         git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
     fi
-
-    sh ~/.vim_runtime/install_awesome_vimrc.sh
+    source ~/.vim_runtime/install_awesome_vimrc.sh
     ln -sf ~/.binghe/my_configs.vim ~/.vim_runtime/my_configs.vim
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-done
-tmux source-file ~/.tmux.conf
+    rm -rf ~/.oh-my-zsh
+
+    curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > tmp.sh
+    bash tmp.sh --unattended
+    rm tmp.sh
+tmux source-file ~/.tmux.conf || echo "success"
 }
 
 make_confs
@@ -160,7 +174,7 @@ fi
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 mkdir -p ~/.config/nvim/
-ln -s ~/.binghe/init.vim ~/config/nvim/
-pip3 install neovim 
+ln -sf ~/.binghe/init.vim ~/.config/nvim/
+pip3 install neovim
 }
 install_nvim
