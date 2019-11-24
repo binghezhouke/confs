@@ -7,9 +7,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
-" Using a non-master branch
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-
 " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
 Plug 'fatih/vim-go', { 'tag': '*' }
 Plug 'nsf/gocode', { 'rtp': 'nvim' }
@@ -22,23 +19,36 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'powerline/powerline'
-Plug 'Valloric/YouCompleteMe'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vim-scripts/mru.vim'
+Plug 'autozimu/LanguageClient-neovim', {                                                                              
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Initialize plugin system
 call plug#end()
 
+let g:deoplete#enable_at_startup = 1
+let g:LanguageClient_serverCommands = {'python': ['pyls'],'cpp': ['clangd']}
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+set hidden
 set number
 set relativenumber
 set autochdir
 set tags=tags,./tags;
-let g:ycm_global_ycm_extra_conf = "~/.binghe/ycm_extra_conf.py"
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_key_invoke_completion = '<C-_>'
-let g:ycm_python_binary_path = 'python3'
-let g:ycm_collect_identifiers_from_tags_files = 0
-set completeopt-=preview
+"set completeopt-=preview
 syntax enable
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set cursorline
