@@ -32,7 +32,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
-let g:LanguageClient_serverCommands = {'python': ['pyls'],'cpp': ['clangd']}
+let g:LanguageClient_serverCommands = {'python': ['pyls'],'cpp': ['clangd'], 'go': ['go-langserver'],}
 
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " Or map each action separately
@@ -43,6 +43,12 @@ nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
+set autoindent
+set expandtab
+set shiftwidth=4
+set smartindent
+set smarttab
+set softtabstop=4
 set hidden
 set number
 set relativenumber
