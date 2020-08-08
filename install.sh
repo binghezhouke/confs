@@ -121,16 +121,6 @@ do
     ln -s "${DIR_NAME}/${x}" ".${x}"
 done
 
-    if [ -d ~/.vim_runtime ]; then
-	    pushd "$(pwd)"
-        cd ~/.vim_runtime
-        git pull origin master
-        popd
-    else
-        git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-    fi
-    source ~/.vim_runtime/install_awesome_vimrc.sh
-    ln -sf ~/.binghe/my_configs.vim ~/.vim_runtime/my_configs.vim
     rm -rf ~/.oh-my-zsh
 
     curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > tmp.sh
