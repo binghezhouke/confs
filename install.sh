@@ -12,7 +12,7 @@ function get_host_type(){
 case $(uname -a) in
     *Ubuntu* )
         hosttype="Ubuntu";;
-    *Arch*)
+    *arch*|*Arch*)
         hosttype="Arch";;
     *Darwin*)
         hosttype="Mac";;
