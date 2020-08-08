@@ -54,7 +54,7 @@ set number
 set relativenumber
 set autochdir
 set tags=tags,./tags;
-"set completeopt-=preview
+set completeopt-=preview
 syntax enable
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set cursorline
